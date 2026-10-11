@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "repository": "neophilism/MMS",
+  "roadmapVersion": 1,
+  "planVerified": true,
+  "plannedPrCount": 8,
+  "observedAt": "2026-10-11T17:40:32.949Z",
+  "units": [
+    {
+      "id": "MMS-01",
+      "title": "Application shell",
+      "origin": "original",
+      "prs": []
+    },
+    {
+      "id": "MMS-02",
+      "title": "Visual identity",
+      "origin": "original",
+      "prs": []
+    },
+    {
+      "id": "MMS-03",
+      "title": "MMS terminology",
+      "origin": "original",
+      "prs": []
+    },
+    {
+      "id": "MMS-04",
+      "title": "Competition defaults",
+      "origin": "original",
+      "prs": []
+    },
+    {
+      "id": "MMS-05",
+      "title": "Actor application experience",
+      "origin": "original",
+      "prs": []
+    },
+    {
+      "id": "MMS-06",
+      "title": "Industry discovery",
+      "origin": "original",
+      "prs": []
+    },
+    {
+      "id": "MMS-07",
+      "title": "Public site and archive",
+      "origin": "original",
+      "prs": []
+    },
+    {
+      "id": "MMS-08",
+      "title": "Production validation",
+      "origin": "original",
+      "prs": []
+    }
+  ],
+  "pullRequests": []
+}
