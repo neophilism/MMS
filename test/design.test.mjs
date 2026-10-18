@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {MMS_TOKENS,BRAND,ROLE_LAYOUTS,layoutForRole} from '../design/tokens.mjs';import {readFile} from 'node:fs/promises';
+test('brand never expands the MMS acronym',()=>{assert.equal(BRAND,'MMS');assert.equal(Object.keys(ROLE_LAYOUTS).length,3);});
+test('distinct accessible performer and industry layout semantics',()=>{assert.notDeepEqual(layoutForRole('performer').sections,layoutForRole('industry').sections);assert.match(layoutForRole('industry').subtitle,/consented/);assert.throws(()=>layoutForRole('admin'));});
+test('semantic tokens are immutable and stylesheet preserves visible keyboard focus',async()=>{assert.ok(Object.isFrozen(MMS_TOKENS.colors));const css=await readFile(new URL('../design/mms.css',import.meta.url),'utf8');assert.match(css,/:focus-visible/);assert.match(css,/prefers-reduced-motion/);assert.match(css,/grid-template-columns/);});
