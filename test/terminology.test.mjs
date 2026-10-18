@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {MMS_TERMS,ENGINE_DOMAIN_KEYS,mmsTerm,safeMmsHeading} from '../domain/terminology.mjs';
+test('every approved generic domain key has singular/plural user vocabulary',()=>{assert.ok(ENGINE_DOMAIN_KEYS.length>=8);for(const key of ENGINE_DOMAIN_KEYS){assert.ok(mmsTerm(key));assert.ok(mmsTerm(key,{plural:true}));}assert.equal(mmsTerm('participant'),'applicant');assert.equal(mmsTerm('performance'),'monologue');});
+test('terminology fails closed on accidental secrets and engine mutations',()=>{assert.throws(()=>mmsTerm('admin'));assert.throws(()=>safeMmsHeading('participant','../private'));assert.ok(Object.isFrozen(MMS_TERMS));});
