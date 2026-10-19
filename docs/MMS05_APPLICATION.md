@@ -8,7 +8,7 @@ The privacy projection disallows public and industry discovery by default.
 The draft service enforces verified applicant ownership, tenant matching,
 versioned saves, explicit current consent before submission, and withdrawal.
 Only verified producer/reviewer roles can read submitted records, and withdrawal
-immediately removes reviewer access. It records a server-clock consent receipt.
+immediately removes reviewer access. It records a server-clock consent receipt. Submission requires a trusted media\nverifier to confirm every referenced private asset; a digest alone cannot submit.
 The in-memory adapter is for isolated tests only.
 
 Run `node --test test/applications.test.mjs test/application-service.test.mjs`
