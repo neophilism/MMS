@@ -7,7 +7,7 @@ export function createHandler({authenticate,engine=configuredEngine,fetchImpl=fe
  if(!['GET','HEAD'].includes(req.method))return reply(req,res,405,'text/plain','Method not allowed');
  let path;try{path=new URL(req.url||'/', 'http://localhost').pathname}catch{return reply(req,res,400,'text/plain','Bad request')}
  if(path==='/health')return reply(req,res,200,'application/json',JSON.stringify({status:'ok',productionReady:false}));
- if(path==='/ready'){const health=await engineHealth(engine,{fetchImpl});return reply(req,res,health.connected?200:503,'application/json',JSON.stringify({engineConnected:health.connected,productionReady:false}))}
+ if(path==='/ready'){const health=await engineHealth(engine,{fetchImpl});return reply(req,res,503,'application/json',JSON.stringify({engineConnected:health.connected,productionReady:false}))}
  const page=route(path);if(!page)return reply(req,res,404,'text/plain','Not found');
  let session=null;if(!page.public&&typeof authenticate==='function'){try{session=await authenticate(req)}catch{return reply(req,res,503,'text/plain','Authentication unavailable')}}
  if(!authorized(page,session))return reply(req,res,404,'text/plain','Not found');
