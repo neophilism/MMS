@@ -1,11 +1,13 @@
-# MMS-02 visual foundation (partial)
+# MMS-02 visual foundation
 
-MMS owns its own semantic color, spacing and surface system, responsive
-grid, visible keyboard focus, dark-mode contrast variables and reduced-motion
-defaults. Performer, industry and audience information architecture remains
-role-distinct. Industry discovery uses only public, consented profiles and
-does not imply access to private applications.
+MMS owns semantic color, spacing and surface tokens, a responsive grid, visible
+keyboard focus, dark mode and reduced-motion styles. Static landing and role
+pages are available from `design/pages.mjs`. They include navigation landmarks,
+a skip link and distinct performer, industry and audience information areas.
+These views contain placeholders only; they expose no applicant information
+and do not suggest live submission or payment.
 
-The CSS and role schemas are not yet wired to an end-to-end rendered UI;
-actual WCAG keyboard, mobile and contrast acceptance must be measured, not
-assumed from styles alone. Full MMS-02 acceptance and deployment remain pending.
+Run `node --test test/design.test.mjs test/pages.test.mjs` on Node 22 or later.
+The app runtime does not yet serve these pages. Browser keyboard, mobile and
+contrast verification plus engine integration are required before MMS-02
+acceptance. These source-level tests are not a WCAG audit.
