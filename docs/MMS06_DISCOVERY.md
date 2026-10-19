@@ -12,7 +12,7 @@ bookmarks do not reveal a revoked profile. The in-memory adapter is for
 isolated tests only. Production storage must make revocation and bookmark
 cleanup transactional and use tenant-scoped indexes.
 
-Run `node --test test/*.test.mjs` on Node 22 or later.
+Contact permission is separate from profile visibility: a verified industry user\nrequests contact, the applicant approves or declines, and revocation makes\nall prior approvals ineffective. No private contact details are exposed by\nthese records.\n\nRun `node --test test/*.test.mjs` on Node 22 or later.
 
 Remaining: bind real verified industry identity and applicant consent UI,
 persist records and bookmarks durably, paginate large searches, escape names
