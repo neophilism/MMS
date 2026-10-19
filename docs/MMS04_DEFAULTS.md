@@ -7,7 +7,7 @@ prompts and monetary functions are disabled by default. Optional features
 cannot be enabled in the local validator without an explicit capability set;
 that set must come from trusted, verified upstream configuration.
 
-Run `node --test test/defaults.test.mjs` on Node 22 or later.
+A draft-settings service requires a verified producer principal, exact tenant match, an atomic compare-and-swap storage adapter and version checks. The bundled in-memory adapter is for isolated tests only; it is not production persistence.\n\nRun `node --test test/defaults.test.mjs test/draft-settings.test.mjs` on Node 22 or later.
 
 These are local proposal values only. Actual venue policies, owner-approved
 rubric, tenant overrides, persisted signed engine rulesets, chronological event
