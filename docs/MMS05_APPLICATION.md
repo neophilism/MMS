@@ -11,7 +11,7 @@ Only verified producer/reviewer roles can read submitted records. Withdrawal
 immediately removes reviewer access. Submission stores a server-clock consent
 receipt and requires verification of every referenced private media object.
 
-The private-media service checks type and size, requires an injected scanner,
+A static accessible form scaffold displays required files and privacy fields, but\nkeeps consent and submission disabled until approved terms and the private API\nare connected.\n\nThe private-media service checks type and size, requires an injected scanner,
 encrypts with AES-256-GCM using an injected tenant key, and verifies ciphertext
 authenticity and digest before submission. Its in-memory object store is only
 for isolated tests. Production requires durable private storage, managed keys,
@@ -19,6 +19,6 @@ a real scanner and streaming for large files.
 
 Run `node --test test/*.test.mjs` on Node 22 or later.
 
-Missing work includes verified upstream identity, applicant consent UI, signed
+Missing work includes verified upstream identity, approved consent text, signed
 uploads, notification, retention/export/delete, browser tests and Live
 Competition Engine integration. Do not serve the in-memory adapters in production.
