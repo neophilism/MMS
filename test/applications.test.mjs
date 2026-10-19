@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validatePrivateApplication,publicApplicationProjection} from '../domain/applications.mjs';
+const valid=()=>({tenantId:'t1',eventId:'e1',applicantId:'p1',consentRevision:1,headshotHash:'a'.repeat(64),resumeHash:'b'.repeat(64),reelHash:null,representation:'self-represented',unionStatus:'prefer-not-to-say'});
+test('private applicant draft validates assets and records consent revision',()=>{const a=validatePrivateApplication(valid());assert.equal(a.consentRevision,1);assert.equal(publicApplicationProjection().publiclyVisible,false);});
+test('reject malformed media and unknown private fields',()=>{assert.throws(()=>validatePrivateApplication({...valid(),headshotHash:'https://public.example/file'}));assert.throws(()=>validatePrivateApplication({...valid(),email:'private'}));assert.throws(()=>validatePrivateApplication({...valid(),consentRevision:0}));});
