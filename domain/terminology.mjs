@@ -10,7 +10,7 @@ export const MMS_TERMS=Object.freeze({
  winner:Object.freeze({one:'winner',many:'winners'}),
  champion:Object.freeze({one:'champion',many:'champions'})
 });
-export const ENGINE_DOMAIN_KEYS=Object.freeze(['event','participant','performance','judge','qualifyingRound','finalRound','winner','champion']);
+export const ENGINE_DOMAIN_KEYS=Object.freeze(Object.keys(MMS_TERMS));
 export function mmsTerm(domain,{plural=false,locale='en-US'}={}){
  if(typeof domain!=='string'||!Object.hasOwn(MMS_TERMS,domain))throw new TypeError('Unsupported MMS term');
  if(typeof plural!=='boolean')throw new TypeError('Plural flag must be Boolean');
