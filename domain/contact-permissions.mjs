@@ -11,11 +11,16 @@ export function createContactPermissionService({profiles,requests=profiles}){
    const row=await requests.requestContact(tenantId,applicantId,principal.subject,profile.consentGeneration);
    if(!row)throw new Error('Profile unavailable');return {status:row.status};
   },
-  async decide({principal,tenantId,industryPrincipalId,decision}){
+  async incoming({principal,tenantId}){
+   scoped(principal,tenantId,'applicant');
+   if(typeof requests.listContactRequests!=='function')throw new TypeError('Contact listing unavailable');
+   return (await requests.listContactRequests(tenantId,principal.subject)).map(row=>({industryPrincipalId:row.industryPrincipalId,consentGeneration:row.consentGeneration,status:row.status}));
+  },
+  async decide({principal,tenantId,industryPrincipalId,decision,expectedGeneration}){
    scoped(principal,tenantId,'applicant');ids(principal.subject,industryPrincipalId);
-   if(!['APPROVED','DECLINED'].includes(decision))throw new TypeError('Invalid decision');
+   if(!['APPROVED','DECLINED'].includes(decision)||!Number.isSafeInteger(expectedGeneration)||expectedGeneration<1)throw new TypeError('Invalid decision');
    const profile=await profiles.getProfile(tenantId,principal.subject);
-   if(profile?.consentActive!==true)throw new Error('Request unavailable');
+   if(profile?.consentActive!==true||profile.consentGeneration!==expectedGeneration)throw new Error('Request unavailable');
    const row=await requests.decideContact(tenantId,principal.subject,industryPrincipalId,profile.consentGeneration,decision);
    if(!row)throw new Error('Request unavailable');return {status:row.status};
   },

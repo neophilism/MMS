@@ -69,7 +69,7 @@ export function createSqliteDiscoveryStore(filename){
    revokeAndDeleteBookmarks(tenant,applicant){
     id(tenant);id(applicant);return transaction(()=>{
      const row=get.get(tenant,applicant);
-     if(row){if(!generation(row.generation))throw new Error('Consent generation exhausted');db.prepare("UPDATE profiles SET active=0,generation=generation+1,name='',url='',search_name='' WHERE tenant=? AND applicant=?").run(tenant,applicant)}
+     if(row){db.prepare("UPDATE profiles SET active=0,generation=?,name='',url='',search_name='' WHERE tenant=? AND applicant=?").run(Math.min(row.generation+1,Number.MAX_SAFE_INTEGER),tenant,applicant)}
      else db.prepare("INSERT INTO profiles VALUES(?,?,'','','',1,1,0)").run(tenant,applicant);
      db.prepare('DELETE FROM bookmarks WHERE tenant=? AND applicant=?').run(tenant,applicant);
     });
@@ -104,6 +104,10 @@ export function createSqliteDiscoveryStore(filename){
     });
    },
    readContact(tenant,applicant,industry){[tenant,applicant,industry].forEach(id);return contact(getContact.get(tenant,applicant,industry))},
+   listContactRequests(tenant,applicant){
+    id(tenant);id(applicant);
+    return db.prepare('SELECT c.* FROM contacts c JOIN profiles p ON p.tenant=c.tenant AND p.applicant=c.applicant AND p.generation=c.generation AND p.active=1 WHERE c.tenant=? AND c.applicant=? ORDER BY c.industry LIMIT 50').all(tenant,applicant).map(contact);
+   },
    close(){db.close()},
   };
  }catch(error){db.close();throw error}

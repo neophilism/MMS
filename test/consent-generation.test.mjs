@@ -19,18 +19,18 @@ for(const adapter of ['memory','sqlite']){
   const store=adapter==='memory'?createMemoryDiscoveryStore():createSqliteDiscoveryStore(disk(t));if(store.close)t.after(()=>store.close());
   const discovery=createDiscoveryService(store),contacts=createContactPermissionService({profiles:store});
   await discovery.publish(publishArgs);await discovery.bookmark(view);await contacts.request(view);
-  await contacts.decide({principal:applicant,tenantId:'t1',industryPrincipalId:'i1',decision:'APPROVED'});
+  await contacts.decide({principal:applicant,tenantId:'t1',industryPrincipalId:'i1',decision:'APPROVED',expectedGeneration:1});
   await discovery.revoke({principal:applicant,tenantId:'t1',applicantId:'p1'});
   const own=await discovery.ownProfile({principal:applicant,tenantId:'t1'});
   assert.equal(own.consentGeneration,2);assert.equal(own.displayName,'');assert.equal(own.publicPortfolioUrl,'');
   await assert.rejects(discovery.publish(publishArgs),/Consent version conflict/);
   await discovery.publish({...publishArgs,expectedGeneration:2});
   assert.deepEqual(await discovery.saved(view),[]);assert.deepEqual(await contacts.status(view),{status:'REVOKED'});
-  await assert.rejects(contacts.decide({principal:applicant,tenantId:'t1',industryPrincipalId:'i1',decision:'APPROVED'}),/unavailable/);
+  await assert.rejects(contacts.decide({principal:applicant,tenantId:'t1',industryPrincipalId:'i1',decision:'APPROVED',expectedGeneration:1}),/unavailable/);
   assert.equal(await store.saveBookmark('t1','i1','p1',1),false);
   assert.equal(await store.requestContact('t1','p1','i1',1),null);
   await contacts.request(view);assert.deepEqual(await contacts.status(view),{status:'PENDING'});
-  const outcomes=await Promise.allSettled(['APPROVED','DECLINED'].map(decision=>contacts.decide({principal:applicant,tenantId:'t1',industryPrincipalId:'i1',decision})));
+  const outcomes=await Promise.allSettled(['APPROVED','DECLINED'].map(decision=>contacts.decide({principal:applicant,tenantId:'t1',industryPrincipalId:'i1',decision,expectedGeneration:3})));
   assert.equal(outcomes.filter(x=>x.status==='fulfilled').length,1);
  });
  test(adapter+': revoke-before-first-publish creates a generation tombstone',async t=>{

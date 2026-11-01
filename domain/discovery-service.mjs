@@ -73,7 +73,7 @@ export function createMemoryDiscoveryStore(){
     .sort((a,b)=>a.applicantId<b.applicantId?-1:a.applicantId>b.applicantId?1:0).slice(0,limit).map(r=>structuredClone(r));
   },
   async revokeAndDeleteBookmarks(t,a){
-   const row=profiles.get(pk(t,a));if(row&&!generation(row.consentGeneration))throw new Error('Consent generation exhausted');profiles.set(pk(t,a),{tenantId:t,applicantId:a,displayName:'',publicPortfolioUrl:'',consentRevision:row?.consentRevision??1,consentActive:false,consentGeneration:(row?.consentGeneration??0)+1});
+   const row=profiles.get(pk(t,a));profiles.set(pk(t,a),{tenantId:t,applicantId:a,displayName:'',publicPortfolioUrl:'',consentRevision:row?.consentRevision??1,consentActive:false,consentGeneration:Math.min((row?.consentGeneration??0)+1,Number.MAX_SAFE_INTEGER)});
    for(const [k,row] of bookmarks)if(row.tenantId===t&&row.applicantId===a)bookmarks.delete(k);
    // Contact rows remain for status/history but cannot match the new generation.
   },
@@ -92,6 +92,7 @@ export function createMemoryDiscoveryStore(){
    const next={...row,status:decision};contacts.set(key,next);return structuredClone(next);
   },
   async readContact(t,a,i){const row=contacts.get(ck(t,a,i));return row?structuredClone(row):null},
+  async listContactRequests(t,a){return [...contacts.values()].filter(row=>row.tenantId===t&&row.applicantId===a&&active(t,a,row.consentGeneration)).slice(0,50).map(row=>structuredClone(row))},
  };
  return store;
 }
