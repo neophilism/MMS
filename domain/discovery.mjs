@@ -3,8 +3,8 @@ const ID=/^[a-zA-Z0-9_-]{1,128}$/;
 export function industryDiscoveryProjection(profile,{verifiedIndustry=false,consented=false}={}){
  if(!profile||Object.getPrototypeOf(profile)!==Object.prototype||
     Object.keys(profile).sort().join(',')!=='applicantId,displayName,publicPortfolioUrl,tenantId'||
-    !ID.test(profile.applicantId||'')||!ID.test(profile.tenantId||'')||
-    typeof profile.displayName!=='string'||profile.displayName.length>120||
+    typeof profile.applicantId!=='string'||!ID.test(profile.applicantId)||typeof profile.tenantId!=='string'||!ID.test(profile.tenantId)||
+    typeof profile.displayName!=='string'||!profile.displayName.trim()||profile.displayName.length>120||/[\u0000-\u001f\u007f]/.test(profile.displayName)||
     typeof profile.publicPortfolioUrl!=='string')throw new TypeError('Invalid profile projection');
  if(verifiedIndustry!==true||consented!==true)return null;
  const url=new URL(profile.publicPortfolioUrl);
