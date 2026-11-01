@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {publicEventProjection} from '../domain/archive.mjs';
+const event=()=>({eventId:'event-1',title:'Final Monologues',status:'completed',published:true,championDisplayName:'Winner',recordingUrl:'https://media.example/video'});
+test('unpublished events are withheld regardless of status',()=>{assert.equal(publicEventProjection({...event(),published:false}),null);});
+test('completed public event discloses only whitelisted public fields',()=>{const result=publicEventProjection(event());assert.ok(Object.isFrozen(result));assert.deepEqual(Object.keys(result),['eventId','title','status','championDisplayName','recordingUrl']);});
+test('scheduled events do not disclose results and private fields rejected',()=>{assert.equal(publicEventProjection({...event(),status:'scheduled'}).championDisplayName,null);assert.throws(()=>publicEventProjection({...event(),email:'secret'}));assert.throws(()=>publicEventProjection({...event(),recordingUrl:'https://media.example/video?token=secret'}));});
