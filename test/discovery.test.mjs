@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {industryDiscoveryProjection,bookmarkIntent} from '../domain/discovery.mjs';
+const profile=()=>({applicantId:'p1',tenantId:'t1',displayName:'Performer',publicPortfolioUrl:'https://portfolio.example/'});
+test('verified industry plus explicit consent required',()=>{assert.equal(industryDiscoveryProjection(profile()),null);assert.equal(industryDiscoveryProjection(profile(),{verifiedIndustry:true}),null);assert.equal(industryDiscoveryProjection(profile(),{verifiedIndustry:true,consented:true}).applicantId,'p1');});
+test('private applicant fields fail closed',()=>{assert.throws(()=>industryDiscoveryProjection({...profile(),unionStatus:'private'},{verifiedIndustry:true,consented:true}));assert.throws(()=>industryDiscoveryProjection({...profile(),publicPortfolioUrl:'https://x.example/?token=secret'},{verifiedIndustry:true,consented:true}));});
+test('bookmark intent does not authorize persistence',()=>{assert.equal(bookmarkIntent({industryPrincipalId:'i1',applicantId:'p1',tenantId:'t1'}).writeAuthorized,false);});
